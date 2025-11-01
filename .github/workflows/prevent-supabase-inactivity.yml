@@ -10,11 +10,13 @@ jobs:
   keep-alive:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase Database
+      - name: Ping Supabase Database with POST request
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          curl --request GET \
-               --url "${SUPABASE_URL}/rest/v1/keep_alive_status?select=*" \
-               --header "apikey: ${SUPABASE_ANON_KEY}"
+          curl --request POST \
+               --url "${SUPABASE_URL}/rest/v1/keep_alive_status" \
+               --header "apikey: ${SUPABASE_ANON_KEY}" \
+               --header "Content-Type: application/json" \
+               --data '{"id": "'$(uuidgen)'"}'
